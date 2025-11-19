@@ -528,7 +528,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: #1a1f3a;
+      background: #0a0e27;
       z-index: 2000;
       display: none;
     }
@@ -540,9 +540,23 @@
     .game-viewport {
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, #1a1f3a 0%, #2a2f4a 100%);
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
       position: relative;
       overflow: hidden;
+    }
+
+    .game-viewport::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 68, 68, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hud {
@@ -554,17 +568,24 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
       z-index: 10;
     }
 
     .hud-item {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
       padding: 12px 25px;
-      border-radius: 10px;
+      border-radius: 15px;
       font-size: 1.2em;
-      border: 2px solid rgba(0, 212, 255, 0.4);
+      border: 2px solid rgba(0, 212, 255, 0.3);
       font-weight: 700;
+      transition: all 0.3s;
+    }
+
+    .hud-item:hover {
+      background: rgba(0, 212, 255, 0.05);
+      border-color: #00d4ff;
     }
 
     .crosshair {
@@ -638,14 +659,15 @@
       bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.95);
-      border: 3px solid #00d4ff;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(0, 212, 255, 0.4);
       border-radius: 20px;
       padding: 40px;
       max-width: 800px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 15px 60px rgba(0, 212, 255, 0.5);
+      box-shadow: 0 15px 60px rgba(0, 212, 255, 0.3);
     }
 
     .question-text {
@@ -654,6 +676,7 @@
       color: #00d4ff;
       font-weight: 700;
       line-height: 1.5;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
     }
 
     .answers-grid {
@@ -663,19 +686,38 @@
 
     .answer-target {
       padding: 25px;
-      background: rgba(0, 212, 255, 0.1);
-      border: 3px solid #00d4ff;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(0, 212, 255, 0.3);
       border-radius: 15px;
       cursor: crosshair;
-      transition: all 0.2s;
+      transition: all 0.3s;
       font-size: 1.5em;
       font-weight: 700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .answer-target::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .answer-target:hover::before {
+      opacity: 1;
     }
 
     .answer-target:hover {
-      background: rgba(0, 212, 255, 0.3);
-      transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.7);
+      background: rgba(0, 212, 255, 0.08);
+      border-color: #00d4ff;
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
     }
 
     .instructor-message {
@@ -683,15 +725,23 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.95);
-      border: 3px solid #00d4ff;
+      background: rgba(10, 14, 39, 0.98);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(0, 212, 255, 0.4);
       border-radius: 20px;
       padding: 50px;
       max-width: 700px;
       width: 90%;
       text-align: center;
       z-index: 100;
-      box-shadow: 0 20px 80px rgba(0, 212, 255, 0.5);
+      box-shadow: 0 20px 80px rgba(0, 212, 255, 0.4);
+    }
+
+    .instructor-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 25px;
+      animation: float 3s ease-in-out infinite;
     }
 
     .instructor-title {
@@ -699,6 +749,7 @@
       color: #00d4ff;
       margin-bottom: 25px;
       font-weight: 800;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
     }
 
     .instructor-text {
@@ -728,15 +779,24 @@
 
     .enemy-count {
       position: absolute;
-      top: 20px;
+      top: 100px;
       right: 3%;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 12px 25px;
-      border-radius: 10px;
-      font-size: 1.2em;
-      border: 2px solid rgba(255, 68, 68, 0.6);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 15px;
+      font-size: 1.3em;
+      border: 2px solid rgba(255, 68, 68, 0.4);
       z-index: 10;
       font-weight: 700;
+      box-shadow: 0 5px 20px rgba(255, 68, 68, 0.2);
+      transition: all 0.3s;
+    }
+
+    .enemy-count:hover {
+      background: rgba(255, 68, 68, 0.05);
+      border-color: #ff4444;
+      transform: scale(1.05);
     }
 
     /* Death & Complete Overlays */
@@ -783,6 +843,14 @@
     @keyframes laserPulse {
       0%, 100% { opacity: 0; }
       50% { opacity: 1; transform: translate(-50%, -50%) scale(2); }
+    }
+
+    .complete-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      opacity: 0;
+      animation: fadeInMessage 0.5s 0.3s forwards, float 3s ease-in-out 0.8s infinite;
     }
 
     .death-message, .complete-title {
@@ -956,7 +1024,7 @@
       <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="35" fill="none" stroke="#00d4ff" stroke-width="4" opacity="0.3" /> <circle cx="50" cy="50" r="25" fill="none" stroke="#00d4ff" stroke-width="4" /> <circle cx="50" cy="50" r="8" fill="#00d4ff" /> <line x1="50" y1="30" x2="50" y2="20" stroke="#00d4ff" stroke-width="3" /> <line x1="70" y1="50" x2="80" y2="50" stroke="#00d4ff" stroke-width="3" />
       </svg>
       <h3 class="feature-title">دقة عالية</h3>
-      <p class="feature-text">كل إجابة خاطئة تؤدي إلى عقوبة فورية - ركز وكن دقيقاً!</p>
+      <p class="feature-text">كل إجابة خاطئة تؤدي إلى عقوبة ����ورية - ركز وكن دقيقاً!</p>
      </div>
      <div class="feature-card">
       <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="30" width="60" height="50" rx="5" fill="#00d4ff" opacity="0.2" /> <path d="M30 45 L45 60 L70 40" stroke="#00d4ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
@@ -985,7 +1053,7 @@
       </svg>
      </div>
      <div class="developer-info">
-      <h3>عبدالمجيد العنزي</h3>
+      <h3>عبدالمج����د العنزي</h3>
       <p class="developer-role">مطور ألعاب | مبرمج Full Stack</p>
       <p class="developer-bio">مطور ألعاب ومبرمج شغوف بدمج ��لتكنولوجيا مع التعليم. ��تخصص في تطوير تجارب تفاعلية مبتكرة تجمع بين المتعة والفائدة. WARCLASS هي رؤيتي لجعل التعلم أكثر تشويقاً وإثارة للجيل الجديد.</p>
       <div class="skills-container"><span class="skill-tag">Unity 3D</span> <span class="skill-tag">Game Development</span> <span class="skill-tag">JavaScript</span> <span class="skill-tag">HTML/CSS</span> <span class="skill-tag">UI/UX Design</span> <span class="skill-tag">Educational Games</span>
@@ -1029,8 +1097,10 @@
     <div id="enemiesContainer"></div>
     <div id="questionWall" class="question-wall hidden"></div>
     <div id="instructorMessage" class="instructor-message hidden">
+     <svg class="instructor-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="15" width="60" height="70" rx="5" fill="#00d4ff" opacity="0.2" /> <rect x="20" y="15" width="60" height="70" rx="5" fill="none" stroke="#00d4ff" stroke-width="3" /> <path d="M30 30 H70 M30 40 H65 M30 50 H68 M30 60 H62" stroke="#00d4ff" stroke-width="2.5" stroke-linecap="round" /> <circle cx="35" cy="70" r="3" fill="#00d4ff" /> <circle cx="50" cy="72" r="3" fill="#00d4ff" /> <circle cx="65" cy="70" r="3" fill="#00d4ff" />
+     </svg>
      <div class="instructor-title">
-      📚 المدرب القائد
+      المدرب القائد
      </div>
      <div class="instructor-text" id="instructorText"></div><button class="continue-button" onclick="startLevel()">ابدأ المهمة</button>
     </div>
@@ -1045,8 +1115,16 @@
   </div>
   <div id="sniperLaser" class="sniper-laser"></div><!-- Level Complete -->
   <div id="levelComplete" class="level-complete">
+   <svg class="complete-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 20 L60 45 L85 50 L62 68 L68 95 L50 80 L32 95 L38 68 L15 50 L40 45 Z" fill="#00ff88" opacity="0.3" /> <path d="M50 20 L60 45 L85 50 L62 68 L68 95 L50 80 L32 95 L38 68 L15 50 L40 45 Z" stroke="#00ff88" stroke-width="3" /> <circle cx="25" cy="25" r="8" fill="#00ff88" opacity="0.6">
+     <animate attributename="opacity" values="0.3;1;0.3" dur="2s" repeatcount="indefinite" />
+    </circle> <circle cx="75" cy="25" r="6" fill="#00ff88" opacity="0.6">
+     <animate attributename="opacity" values="0.5;1;0.5" dur="1.5s" repeatcount="indefinite" />
+    </circle> <circle cx="85" cy="75" r="7" fill="#00ff88" opacity="0.6">
+     <animate attributename="opacity" values="0.4;1;0.4" dur="1.8s" repeatcount="indefinite" />
+    </circle>
+   </svg>
    <div class="complete-title">
-    ✨ نجحت!
+    نجحت!
    </div>
    <div class="complete-message" id="completeMessage">
     لقد أكملت المرحلة بنجاح
@@ -1074,7 +1152,7 @@
     const levels = [
       {
         number: 1,
-        name: "فصل الرياضيات",
+        name: "فصل الرياض��ات",
         enemies: 3,
         question: "ما هو ناتج 12 × 8؟",
         answers: ["96", "84", "104"],
@@ -1088,7 +1166,7 @@
         question: "ما هي صيغة الماء الكيمي��ئية؟",
         answers: ["H2O", "CO2", "O2"],
         correct: 0,
-        instruction: "المختبر مليء بالأعداء! استخدم تدريبك للقضاء عليهم والإجابة على السؤال العلمي."
+        instruction: "المختبر مليء بالأعداء! استخدم تدريبك للقضاء ��ليهم والإجابة ��لى السؤال العلمي."
       },
       {
         number: 3,
@@ -1112,8 +1190,8 @@
         number: 5,
         name: "مكتب المدير",
         enemies: 7,
-        question: "ما هي عاصمة فرنسا؟",
-        answers: ["باريس", "لندن", "برلين"],
+        question: "ما هي عاصمة ��رنسا؟",
+        answers: ["باري��", "لندن", "برلين"],
         correct: 0,
         instruction: "المعركة النهائية في مكتب المدير! هذه أصعب مهمة. استعد وأظهر كل ما تعلمته!"
       }
@@ -1298,9 +1376,9 @@
       const message = document.getElementById('completeMessage');
       
       if (currentLevel < levels.length) {
-        message.textContent = `لقد أكملت ${levels[currentLevel - 1].name}! المرحلة ${currentLevel + 1} مفتوحة الآن 🔓`;
+        message.textContent = `لقد أكملت ${levels[currentLevel - 1].name}! المرحلة ${currentLevel + 1} مفتوحة الآن`;
       } else {
-        message.textContent = 'مبروك! لقد أكملت جميع المراحل! 🎉';
+        message.textContent = 'مبروك! لقد أكملت جميع المراحل';
       }
       
       complete.classList.add('active');
@@ -1371,5 +1449,5 @@
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d20dfd63bbaa5',t:'MTc2MzUyODI2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d28d763e2ed94',t:'MTc2MzUyODU5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
