@@ -101,7 +101,7 @@
       justify-content: center;
       align-items: center;
       padding: 120px 5% 80px;
-      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+      background: #0a0e27;
       position: relative;
       overflow: hidden;
     }
@@ -113,10 +113,19 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(255, 68, 68, 0.1) 0%, transparent 50%);
+      background-image: 
+        radial-gradient(circle, rgba(0, 212, 255, 0.4) 2px, transparent 2px),
+        radial-gradient(circle, rgba(0, 212, 255, 0.3) 1.5px, transparent 1.5px),
+        radial-gradient(circle, rgba(0, 212, 255, 0.2) 1px, transparent 1px);
+      background-size: 80px 80px, 60px 60px, 40px 40px;
+      background-position: 0 0, 30px 30px, 15px 15px;
       pointer-events: none;
+      animation: dotMove 20s linear infinite;
+    }
+
+    @keyframes dotMove {
+      0% { background-position: 0 0, 30px 30px, 15px 15px; }
+      100% { background-position: 80px 80px, 90px 90px, 55px 55px; }
     }
 
     .hero-content {
@@ -1056,7 +1065,7 @@
      <div class="developer-info">
       <h3>عبدالمجيد العنزي</h3>
       <p class="developer-role">مطور ألعاب | مبرمج Full Stack</p>
-      <p class="developer-bio">مطور ألعاب ومبرمج شغوف بدمج التكنولوجيا مع التعليم. متخصص في تطوير تجارب تفاعلية مبتكرة تجمع بين المتعة والفائدة. WARCLASS هي رؤيتي لجعل التعلم أكثر تشويقاً وإثارة للجيل الجديد.</p>
+      <p class="developer-bio">مطور ألعاب ومبرمج شغوف بدمج التكنولوجيا مع التعليم. متخصص في تطوير تجارب تفاعلية مبتكرة تجمع بين المتعة والفائدة. WARCLASS هي رؤيتي لجعل التعلم أكثر تشويقاً وإثارة للجيل ال��ديد.</p>
       <div class="skills-container"><span class="skill-tag">Unity 3D</span> <span class="skill-tag">Game Development</span> <span class="skill-tag">JavaScript</span> <span class="skill-tag">HTML/CSS</span> <span class="skill-tag">UI/UX Design</span> <span class="skill-tag">Educational Games</span>
       </div>
      </div>
@@ -1451,5 +1460,5 @@
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d2f37b6aaed94',t:'MTc2MzUyODg1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d35de5645ed94',t:'MTc2MzUyOTEyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
