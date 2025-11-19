@@ -1,0 +1,1377 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WARCLASS - حرب الصفوف</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      background: #0a0e27;
+      color: #fff;
+      overflow-x: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    html {
+      height: 100%;
+      width: 100%;
+      scroll-behavior: smooth;
+    }
+
+    .game-container {
+      width: 100%;
+      min-height: 100%;
+      position: relative;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 14, 39, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+    }
+
+    .logo-text {
+      font-size: 1.8em;
+      font-weight: 900;
+      color: #00d4ff;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1em;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 120px 5% 80px;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(255, 68, 68, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 900px;
+      z-index: 1;
+    }
+
+    .hero-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .game-title {
+      font-size: 5em;
+      font-weight: 900;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #00d4ff 0%, #0080ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+      animation: titlePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .game-subtitle {
+      font-size: 2em;
+      color: #a0b0c0;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .game-description {
+      font-size: 1.3em;
+      line-height: 1.8;
+      color: #8090a0;
+      margin-bottom: 50px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 20px 50px;
+      font-size: 1.4em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #00d4ff 0%, #0080ff 100%);
+      color: #0a0e27;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+      font-family: 'Cairo', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.5);
+    }
+
+    .btn-secondary {
+      padding: 20px 50px;
+      font-size: 1.4em;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Cairo', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #00d4ff;
+      transform: translateY(-5px);
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 100px 5%;
+      background: #0f1229;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 3em;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: #00d4ff;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      font-size: 1.3em;
+      color: #8090a0;
+      margin-bottom: 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(0, 212, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background: rgba(0, 212, 255, 0.05);
+      border-color: #00d4ff;
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 25px;
+    }
+
+    .feature-title {
+      font-size: 1.6em;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .feature-text {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #8090a0;
+    }
+
+    /* Levels Section */
+    .levels-section {
+      padding: 100px 5%;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+    }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .level-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .level-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .level-card:hover::before {
+      opacity: 1;
+    }
+
+    .level-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      border-color: #00d4ff;
+      box-shadow: 0 20px 50px rgba(0, 212, 255, 0.3);
+    }
+
+    .level-card.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .level-card.locked:hover {
+      transform: none;
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .level-number {
+      font-size: 4em;
+      font-weight: 900;
+      color: #00d4ff;
+      margin-bottom: 15px;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .level-name {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .level-enemies {
+      font-size: 1em;
+      color: #8090a0;
+    }
+
+    .lock-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      opacity: 0.5;
+    }
+
+    /* Developer Section */
+    .developer-section {
+      padding: 100px 5%;
+      background: #0f1229;
+    }
+
+    .developer-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .developer-image {
+      text-align: center;
+    }
+
+    .developer-avatar {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      border: 5px solid #00d4ff;
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+      margin-bottom: 20px;
+    }
+
+    .developer-info h3 {
+      font-size: 2.5em;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #00d4ff;
+    }
+
+    .developer-role {
+      font-size: 1.4em;
+      color: #8090a0;
+      margin-bottom: 25px;
+    }
+
+    .developer-bio {
+      font-size: 1.2em;
+      line-height: 1.8;
+      color: #a0b0c0;
+      margin-bottom: 30px;
+    }
+
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .skill-tag {
+      padding: 10px 20px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 25px;
+      font-size: 1em;
+      color: #00d4ff;
+      font-weight: 600;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      padding: 100px 5% 60px;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto 60px;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(0, 212, 255, 0.2);
+      border-radius: 20px;
+      padding: 35px;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-10px);
+      border-color: #00d4ff;
+      background: rgba(0, 212, 255, 0.05);
+      box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+    }
+
+    .contact-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .contact-text {
+      font-size: 1.1em;
+      color: #8090a0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 5%;
+      background: #0a0e27;
+      border-top: 2px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .footer-text {
+      font-size: 1.1em;
+      color: #8090a0;
+      margin-bottom: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .footer-link {
+      color: #00d4ff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .footer-link:hover {
+      color: #fff;
+    }
+
+    /* Game Screen */
+    .game-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #1a1f3a;
+      z-index: 2000;
+      display: none;
+    }
+
+    .game-screen.active {
+      display: block;
+    }
+
+    .game-viewport {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #1a1f3a 0%, #2a2f4a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hud {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 3%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+      z-index: 10;
+    }
+
+    .hud-item {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      border: 2px solid rgba(0, 212, 255, 0.4);
+      font-weight: 700;
+    }
+
+    .crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      z-index: 5;
+    }
+
+    .crosshair::before,
+    .crosshair::after {
+      content: '';
+      position: absolute;
+      background: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    }
+
+    .crosshair::before {
+      width: 24px;
+      height: 3px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .crosshair::after {
+      width: 3px;
+      height: 24px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .enemy {
+      position: absolute;
+      width: 70px;
+      height: 90px;
+      cursor: crosshair;
+      transition: all 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 5px 15px rgba(255, 68, 68, 0.5));
+    }
+
+    .enemy:hover {
+      transform: scale(1.15);
+      filter: drop-shadow(0 8px 25px rgba(255, 68, 68, 0.8));
+    }
+
+    .enemy svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .enemy.hit {
+      animation: enemyHit 0.4s;
+    }
+
+    @keyframes enemyHit {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.5) rotate(20deg); opacity: 0.5; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    .question-wall {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid #00d4ff;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 15px 60px rgba(0, 212, 255, 0.5);
+    }
+
+    .question-text {
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #00d4ff;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .answers-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .answer-target {
+      padding: 25px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 3px solid #00d4ff;
+      border-radius: 15px;
+      cursor: crosshair;
+      transition: all 0.2s;
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+
+    .answer-target:hover {
+      background: rgba(0, 212, 255, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.7);
+    }
+
+    .instructor-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid #00d4ff;
+      border-radius: 20px;
+      padding: 50px;
+      max-width: 700px;
+      width: 90%;
+      text-align: center;
+      z-index: 100;
+      box-shadow: 0 20px 80px rgba(0, 212, 255, 0.5);
+    }
+
+    .instructor-title {
+      font-size: 2.5em;
+      color: #00d4ff;
+      margin-bottom: 25px;
+      font-weight: 800;
+    }
+
+    .instructor-text {
+      font-size: 1.5em;
+      line-height: 1.8;
+      margin-bottom: 35px;
+      color: #a0b0c0;
+    }
+
+    .continue-button {
+      padding: 18px 45px;
+      font-size: 1.4em;
+      background: #00d4ff;
+      color: #0a0e27;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: all 0.3s;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .continue-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.6);
+    }
+
+    .enemy-count {
+      position: absolute;
+      top: 20px;
+      right: 3%;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      border: 2px solid rgba(255, 68, 68, 0.6);
+      z-index: 10;
+      font-weight: 700;
+    }
+
+    /* Death & Complete Overlays */
+    .death-overlay, .level-complete {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: black;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+
+    .death-overlay.active, .level-complete.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .sniper-laser {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ff0000 0%, transparent 70%);
+      box-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
+      opacity: 0;
+      z-index: 2999;
+    }
+
+    .sniper-laser.active {
+      animation: laserPulse 2s ease-in-out;
+    }
+
+    @keyframes laserPulse {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(2); }
+    }
+
+    .death-message, .complete-title {
+      font-size: 3.5em;
+      margin-bottom: 40px;
+      text-align: center;
+      font-weight: 900;
+      opacity: 0;
+      animation: fadeInMessage 0.5s 3s forwards;
+    }
+
+    .death-message {
+      color: #ff4444;
+    }
+
+    .complete-title {
+      color: #00ff88;
+      text-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+      animation: fadeInMessage 0.5s 0.5s forwards;
+    }
+
+    @keyframes fadeInMessage {
+      to { opacity: 1; }
+    }
+
+    .death-buttons, .complete-buttons {
+      display: flex;
+      gap: 25px;
+      opacity: 0;
+      animation: fadeInMessage 0.5s 3.5s forwards;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .complete-buttons {
+      animation: fadeInMessage 0.5s 1s forwards;
+    }
+
+    .death-button {
+      padding: 20px 45px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .death-button.restart {
+      background: #00d4ff;
+      color: #0a0e27;
+    }
+
+    .death-button.menu {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 2px solid #666;
+    }
+
+    .death-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .complete-message {
+      font-size: 1.8em;
+      margin-bottom: 40px;
+      color: #a0b0c0;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInMessage 0.5s 0.7s forwards;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .game-title {
+        font-size: 3em;
+      }
+
+      .developer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .developer-avatar {
+        width: 180px;
+        height: 180px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .question-text {
+        font-size: 1.5em;
+      }
+
+      .answer-target {
+        font-size: 1.2em;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- Navigation -->
+  <nav class="navbar">
+   <div class="logo-container">
+    <svg class="logo-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#00d4ff" opacity="0.1" /> <path d="M30 35 L50 25 L70 35 L70 55 L50 65 L30 55 Z" fill="none" stroke="#00d4ff" stroke-width="3" /> <circle cx="50" cy="45" r="8" fill="#00d4ff" /> <rect x="45" y="55" width="10" height="15" fill="#00d4ff" rx="2" />
+    </svg><span class="logo-text" id="navTitle">WARCLASS</span>
+   </div>
+   <div class="nav-links"><a class="nav-link" href="#home">الرئيسية</a> <a class="nav-link" href="#features">المميزات</a> <a class="nav-link" href="#levels">المراحل</a> <a class="nav-link" href="#developer">المطور</a> <a class="nav-link" href="#contact">التواصل</a>
+   </div>
+  </nav>
+  <div class="game-container"><!-- Hero Section -->
+   <section id="home" class="hero-section">
+    <div class="hero-content">
+     <svg class="hero-icon" viewbox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
+       <lineargradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#0080ff;stop-opacity:1" />
+       </lineargradient>
+      </defs> <circle cx="100" cy="100" r="90" fill="url(#heroGrad)" opacity="0.2" /> <path d="M60 70 L100 50 L140 70 L140 110 L100 130 L60 110 Z" fill="none" stroke="url(#heroGrad)" stroke-width="6" /> <circle cx="100" cy="90" r="18" fill="url(#heroGrad)" /> <rect x="88" y="110" width="24" height="35" fill="url(#heroGrad)" rx="5" /> <path d="M70 130 L100 150 L130 130" stroke="url(#heroGrad)" stroke-width="5" stroke-linecap="round" />
+     </svg>
+     <h1 class="game-title" id="mainTitle">WARCLASS</h1>
+     <h2 class="game-subtitle">حرب الصفوف</h2>
+     <p class="game-description">اختبر مهاراتك القتالية والذهنية في لعبة تجمع بين الأكشن والتعليم. قاتل في ساحات المدرسة، واجه الأعداء، وأجب على الأسئلة لتتقدم عبر المراحل المثيرة!</p>
+     <div class="cta-buttons"><button class="btn-primary" onclick="scrollToLevels()">
+       <svg width="24" height="24" viewbox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+       </svg> ابدأ اللعب الآن </button> <button class="btn-secondary" onclick="scrollToFeatures()">
+       <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4M12 8h.01" />
+       </svg> اكتشف المزيد </button>
+     </div>
+    </div>
+   </section><!-- Features Section -->
+   <section id="features" class="features-section">
+    <h2 class="section-title">مميزات اللعبة</h2>
+    <p class="section-subtitle">تجربة فريدة تجمع بين الإثارة والتعلم</p>
+    <div class="features-grid">
+     <div class="feature-card">
+      <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="#00d4ff" opacity="0.2" /> <path d="M30 50 L45 65 L70 35" stroke="#00d4ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <h3 class="feature-title">قتال ممتع</h3>
+      <p class="feature-text">استمتع بتجربة FPS مثيرة مع أعداء متنوعين وتحديات متصاعدة في كل مرحلة</p>
+     </div>
+     <div class="feature-card">
+      <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="20" width="60" height="60" rx="5" fill="#00d4ff" opacity="0.2" /> <path d="M35 35 L45 45 M45 35 L35 45" stroke="#00d4ff" stroke-width="4" stroke-linecap="round" /> <circle cx="65" cy="40" r="5" fill="#00d4ff" /> <path d="M30 60 H70 M30 70 H60" stroke="#00d4ff" stroke-width="3" stroke-linecap="round" />
+      </svg>
+      <h3 class="feature-title">أسئلة تعليمية</h3>
+      <p class="feature-text">اختبر معلوماتك في الرياضيات، العلوم، التاريخ، واللغات</p>
+     </div>
+     <div class="feature-card">
+      <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 20 L60 45 L85 50 L62 68 L68 95 L50 80 L32 95 L38 68 L15 50 L40 45 Z" fill="#00d4ff" opacity="0.3" /> <path d="M50 20 L60 45 L85 50 L62 68 L68 95 L50 80 L32 95 L38 68 L15 50 L40 45 Z" stroke="#00d4ff" stroke-width="3" />
+      </svg>
+      <h3 class="feature-title">نظام التقدم</h3>
+      <p class="feature-text">افتح مراحل جديدة وحقق إنجازات مع كل إجابة صحيحة</p>
+     </div>
+     <div class="feature-card">
+      <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="25" y="35" width="50" height="40" rx="3" fill="#00d4ff" opacity="0.2" /> <rect x="30" y="40" width="40" height="30" rx="2" fill="none" stroke="#00d4ff" stroke-width="3" /> <circle cx="50" cy="30" r="8" fill="#00d4ff" /> <rect x="45" y="20" width="10" height="15" fill="#00d4ff" rx="2" />
+      </svg>
+      <h3 class="feature-title">مراحل متنوعة</h3>
+      <p class="feature-text">اكتشف 5 بيئات مختلفة من فصل الرياضيات إلى مكتب المدير</p>
+     </div>
+     <div class="feature-card">
+      <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="35" fill="none" stroke="#00d4ff" stroke-width="4" opacity="0.3" /> <circle cx="50" cy="50" r="25" fill="none" stroke="#00d4ff" stroke-width="4" /> <circle cx="50" cy="50" r="8" fill="#00d4ff" /> <line x1="50" y1="30" x2="50" y2="20" stroke="#00d4ff" stroke-width="3" /> <line x1="70" y1="50" x2="80" y2="50" stroke="#00d4ff" stroke-width="3" />
+      </svg>
+      <h3 class="feature-title">دقة عالية</h3>
+      <p class="feature-text">كل إجابة خاطئة تؤدي إلى عقوبة فورية - ركز وكن دقيقاً!</p>
+     </div>
+     <div class="feature-card">
+      <svg class="feature-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="30" width="60" height="50" rx="5" fill="#00d4ff" opacity="0.2" /> <path d="M30 45 L45 60 L70 40" stroke="#00d4ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <h3 class="feature-title">تصميم احترافي</h3>
+      <p class="feature-text">واجهة مستخدم عصرية وتجربة لعب سلسة وممتعة</p>
+     </div>
+    </div>
+   </section><!-- Levels Section -->
+   <section id="levels" class="levels-section">
+    <h2 class="section-title">المراحل</h2>
+    <p class="section-subtitle">خمس مراحل مليئة بالتحديات والمعرفة</p>
+    <div class="levels-grid" id="levelsGrid"></div>
+   </section><!-- Developer Section -->
+   <section id="developer" class="developer-section">
+    <h2 class="section-title">عن المطور</h2>
+    <p class="section-subtitle">العقل المبدع خلف WARCLASS</p>
+    <div class="developer-content">
+     <div class="developer-image">
+      <svg class="developer-avatar" viewbox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
+        <lineargradient id="devGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+         <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+         <stop offset="100%" style="stop-color:#0080ff;stop-opacity:1" />
+        </lineargradient>
+       </defs> <circle cx="100" cy="100" r="95" fill="url(#devGrad)" opacity="0.3" /> <circle cx="100" cy="80" r="35" fill="url(#devGrad)" /> <path d="M40 150 Q100 120 160 150 L160 180 Q100 160 40 180 Z" fill="url(#devGrad)" /> <circle cx="85" cy="75" r="5" fill="#0a0e27" /> <circle cx="115" cy="75" r="5" fill="#0a0e27" /> <path d="M85 95 Q100 105 115 95" stroke="#0a0e27" stroke-width="3" stroke-linecap="round" fill="none" />
+      </svg>
+     </div>
+     <div class="developer-info">
+      <h3>عبدالمجيد العنزي</h3>
+      <p class="developer-role">مطور ألعاب | مبرمج Full Stack</p>
+      <p class="developer-bio">مطور ألعاب ومبرمج شغوف بدمج التكنولوجيا مع التعليم. متخصص في تطوير تجارب تفاعلية مبتكرة تجمع بين المتعة والفائدة. WARCLASS هي رؤيتي لجعل التعلم أكثر تشويقاً وإثارة للجيل الجديد.</p>
+      <div class="skills-container"><span class="skill-tag">Unity 3D</span> <span class="skill-tag">Game Development</span> <span class="skill-tag">JavaScript</span> <span class="skill-tag">HTML/CSS</span> <span class="skill-tag">UI/UX Design</span> <span class="skill-tag">Educational Games</span>
+      </div>
+     </div>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contact" class="contact-section">
+    <h2 class="section-title">تواصل معي</h2>
+    <p class="section-subtitle">لأي استفسارات أو اقتراحات</p>
+    <div class="contact-grid"><a href="mailto:abdulmajeed@example.com" class="contact-card">
+      <svg class="contact-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="15" y="25" width="70" height="50" rx="5" fill="#00d4ff" opacity="0.2" /> <path d="M15 30 L50 55 L85 30" stroke="#00d4ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /> <rect x="15" y="25" width="70" height="50" rx="5" fill="none" stroke="#00d4ff" stroke-width="3" />
+      </svg><h3 class="contact-title">البريد الإلكتروني</h3><p class="contact-text">abdulmajeed@warclass.com</p></a> <a href="https://twitter.com/abdulmajeed" target="_blank" rel="noopener noreferrer" class="contact-card">
+      <svg class="contact-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="#00d4ff" opacity="0.2" /> <path d="M70 35 C65 40 60 42 55 42 C55 38 56 34 60 32 C54 32 50 36 48 40 C46 44 45 48 45 52 C35 52 28 46 22 38 C20 42 21 46 24 49 C22 49 20 48 19 47 C19 51 21 54 25 56 C23 56 22 56 21 55 C22 58 25 61 29 62 C25 64 21 64 18 63 C21 67 26 69 31 69 C26 73 19 75 12 74 C18 78 25 80 32 80 C42 80 50 77 56 71 C62 65 66 57 67 49 C67 48 67 47 67 46 C69 44 71 42 72 40 C70 41 68 41 66 41 C68 40 69 38 70 35 Z" fill="#00d4ff" />
+      </svg><h3 class="contact-title">تويتر</h3><p class="contact-text">@AbdulmajeedDev</p></a> <a href="https://github.com/abdulmajeed" target="_blank" rel="noopener noreferrer" class="contact-card">
+      <svg class="contact-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="45" r="35" fill="#00d4ff" opacity="0.2" /> <path d="M50 20 C32 20 18 34 18 52 C18 66 27 78 39 82 C40 82 41 81 41 80 L41 74 C35 75 33 71 33 71 C32 69 31 68 31 68 C29 66 31 66 31 66 C33 66 34 68 34 68 C36 71 39 70 41 69 C41 68 42 67 43 66 C37 65 31 63 31 53 C31 50 32 48 34 46 C34 45 33 43 34 40 C34 40 36 39 41 43 C43 42 45 42 47 42 C49 42 51 42 53 43 C58 39 60 40 60 40 C61 43 60 45 60 46 C62 48 63 50 63 53 C63 63 57 65 51 66 C52 67 53 69 53 71 L53 80 C53 81 54 82 55 82 C67 78 76 66 76 52 C76 34 62 20 50 20 Z" fill="#00d4ff" />
+      </svg><h3 class="contact-title">GitHub</h3><p class="contact-text">github.com/abdulmajeed</p></a> <a href="https://linkedin.com/in/abdulmajeed" target="_blank" rel="noopener noreferrer" class="contact-card">
+      <svg class="contact-icon" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="20" width="60" height="60" rx="8" fill="#00d4ff" opacity="0.2" /> <rect x="20" y="20" width="60" height="60" rx="8" fill="none" stroke="#00d4ff" stroke-width="3" /> <rect x="30" y="45" width="8" height="25" fill="#00d4ff" /> <circle cx="34" cy="35" r="4" fill="#00d4ff" /> <path d="M45 45 L45 55 C45 60 48 65 53 65 C58 65 60 62 60 57 L60 45" fill="none" stroke="#00d4ff" stroke-width="8" stroke-linecap="round" />
+      </svg><h3 class="contact-title">LinkedIn</h3><p class="contact-text">Abdulmajeed Al-Anazi</p></a>
+    </div>
+   </section><!-- Footer -->
+   <footer class="footer">
+    <p class="footer-text">© 2024 WARCLASS - حرب الصفوف. جميع الحقوق محفوظة.</p>
+    <p class="footer-text">تم التطوير بواسطة عبدالمجيد العنزي</p>
+    <div class="footer-links"><a href="#" class="footer-link">سياسة الخصوصية</a> <a href="#" class="footer-link">شروط الاستخدام</a> <a href="#contact" class="footer-link">اتصل بنا</a>
+    </div>
+   </footer>
+  </div><!-- Game Screen -->
+  <div id="gameScreen" class="game-screen">
+   <div class="game-viewport" id="viewport">
+    <div class="hud">
+     <div class="hud-item">
+      المرحلة: <span id="currentLevelDisplay">1</span>
+     </div>
+     <div class="hud-item">
+      الذخيرة: ∞
+     </div><button class="hud-item" onclick="exitGame()" style="cursor: pointer; border-color: #ff4444;">خروج</button>
+    </div>
+    <div class="enemy-count">
+     الأعداء: <span id="enemiesLeft">0</span>
+    </div>
+    <div class="crosshair"></div>
+    <div id="enemiesContainer"></div>
+    <div id="questionWall" class="question-wall hidden"></div>
+    <div id="instructorMessage" class="instructor-message hidden">
+     <div class="instructor-title">
+      📚 المدرب القائد
+     </div>
+     <div class="instructor-text" id="instructorText"></div><button class="continue-button" onclick="startLevel()">ابدأ المهمة</button>
+    </div>
+   </div>
+  </div><!-- Death Overlay -->
+  <div id="deathOverlay" class="death-overlay">
+   <div class="death-message">
+    حظ موفق، ابدأ من جديد
+   </div>
+   <div class="death-buttons"><button class="death-button restart" onclick="restartLevel()">إعادة المحاولة</button> <button class="death-button menu" onclick="exitGame()">القائمة الرئيسية</button>
+   </div>
+  </div>
+  <div id="sniperLaser" class="sniper-laser"></div><!-- Level Complete -->
+  <div id="levelComplete" class="level-complete">
+   <div class="complete-title">
+    ✨ نجحت!
+   </div>
+   <div class="complete-message" id="completeMessage">
+    لقد أكملت المرحلة بنجاح
+   </div>
+   <div class="complete-buttons"><button class="death-button restart" onclick="nextLevel()">المرحلة التالية</button> <button class="death-button menu" onclick="exitGame()">القائمة الرئيسية</button>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      primary_color: "#00d4ff",
+      background_color: "#0a0e27",
+      secondary_color: "#1a1f3a",
+      accent_color: "#ff4444",
+      success_color: "#00ff88",
+      game_title: "WARCLASS"
+    };
+
+    const config = { ...defaultConfig };
+
+    let currentLevel = 1;
+    let unlockedLevels = 1;
+    let enemiesRemaining = 0;
+    let gameActive = false;
+
+    const levels = [
+      {
+        number: 1,
+        name: "فصل الرياضيات",
+        enemies: 3,
+        question: "ما هو ناتج 12 × 8؟",
+        answers: ["96", "84", "104"],
+        correct: 0,
+        instruction: "مرحباً أيها الجندي! استعد لمهمتك الأولى في فصل الرياضيات. تخلص من الأعداء ثم أجب على السؤال بدقة!"
+      },
+      {
+        number: 2,
+        name: "المختبر",
+        enemies: 4,
+        question: "ما هي صيغة الماء الكيميائية؟",
+        answers: ["H2O", "CO2", "O2"],
+        correct: 0,
+        instruction: "المختبر مليء بالأعداء! استخدم تدريبك للقضاء عليهم والإجابة على السؤال العلمي."
+      },
+      {
+        number: 3,
+        name: "المكتبة",
+        enemies: 5,
+        question: "من مؤلف رواية 'الأيام'؟",
+        answers: ["طه حسين", "نجيب محفوظ", "توفيق الحكيم"],
+        correct: 0,
+        instruction: "المكتبة تحولت إلى ساحة معركة! أظهر معرفتك الأدبية بعد تطهير المنطقة."
+      },
+      {
+        number: 4,
+        name: "ساحة المدرسة",
+        enemies: 6,
+        question: "في أي سنة بدأت الحرب العالمية الثانية؟",
+        answers: ["1939", "1914", "1945"],
+        correct: 0,
+        instruction: "الساحة الخارجية! كن حذراً، الأعداء يزدادون. أثبت معرفتك التاريخية."
+      },
+      {
+        number: 5,
+        name: "مكتب المدير",
+        enemies: 7,
+        question: "ما هي عاصمة فرنسا؟",
+        answers: ["باريس", "لندن", "برلين"],
+        correct: 0,
+        instruction: "المعركة النهائية في مكتب المدير! هذه أصعب مهمة. استعد وأظهر كل ما تعلمته!"
+      }
+    ];
+
+    function init() {
+      renderLevelCards();
+    }
+
+    function renderLevelCards() {
+      const grid = document.getElementById('levelsGrid');
+      grid.innerHTML = '';
+      
+      levels.forEach(level => {
+        const card = document.createElement('div');
+        card.className = `level-card ${level.number > unlockedLevels ? 'locked' : ''}`;
+        
+        if (level.number > unlockedLevels) {
+          card.innerHTML = `
+            <svg class="lock-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="30" y="45" width="40" height="35" rx="5" fill="#666" opacity="0.5"/>
+              <path d="M35 45 L35 35 C35 25 43 20 50 20 C57 20 65 25 65 35 L65 45" stroke="#666" stroke-width="5" fill="none"/>
+              <circle cx="50" cy="62" r="5" fill="#888"/>
+            </svg>
+            <div class="level-number">${level.number}</div>
+            <div class="level-name">${level.name}</div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="level-number">${level.number}</div>
+            <div class="level-name">${level.name}</div>
+            <div class="level-enemies">الأعداء: ${level.enemies}</div>
+          `;
+          card.onclick = () => loadLevel(level.number);
+        }
+        
+        grid.appendChild(card);
+      });
+    }
+
+    function scrollToLevels() {
+      document.getElementById('levels').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToFeatures() {
+      document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function loadLevel(levelNum) {
+      currentLevel = levelNum;
+      const level = levels[levelNum - 1];
+      
+      document.getElementById('gameScreen').classList.add('active');
+      document.getElementById('instructorMessage').classList.remove('hidden');
+      document.getElementById('instructorText').textContent = level.instruction;
+      document.getElementById('currentLevelDisplay').textContent = levelNum;
+      
+      gameActive = false;
+    }
+
+    function startLevel() {
+      document.getElementById('instructorMessage').classList.add('hidden');
+      gameActive = true;
+      
+      const level = levels[currentLevel - 1];
+      spawnEnemies(level.enemies);
+    }
+
+    function spawnEnemies(count) {
+      enemiesRemaining = count;
+      updateEnemyCount();
+      
+      const container = document.getElementById('enemiesContainer');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const enemy = document.createElement('div');
+          enemy.className = 'enemy';
+          enemy.innerHTML = `
+            <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="120" rx="30" ry="10" fill="#000" opacity="0.3"/>
+              <rect x="35" y="60" width="30" height="45" fill="#ff4444" rx="3"/>
+              <circle cx="50" cy="30" r="20" fill="#ff6666"/>
+              <circle cx="42" cy="28" r="3" fill="#000"/>
+              <circle cx="58" cy="28" r="3" fill="#000"/>
+              <path d="M40 38 Q50 42 60 38" stroke="#000" stroke-width="2" fill="none"/>
+              <rect x="35" y="105" width="12" height="25" fill="#cc3333" rx="2"/>
+              <rect x="53" y="105" width="12" height="25" fill="#cc3333" rx="2"/>
+              <rect x="20" y="65" width="15" height="8" fill="#ff4444" rx="2"/>
+              <rect x="65" y="65" width="15" height="8" fill="#ff4444" rx="2"/>
+            </svg>
+          `;
+          enemy.style.left = `${Math.random() * 80 + 10}%`;
+          enemy.style.top = `${Math.random() * 50 + 20}%`;
+          enemy.onclick = (e) => shootEnemy(e, enemy);
+          container.appendChild(enemy);
+        }, i * 500);
+      }
+    }
+
+    function shootEnemy(e, enemy) {
+      if (!gameActive) return;
+      
+      e.stopPropagation();
+      enemy.classList.add('hit');
+      enemiesRemaining--;
+      updateEnemyCount();
+      
+      setTimeout(() => {
+        enemy.remove();
+        if (enemiesRemaining === 0) {
+          showQuestion();
+        }
+      }, 400);
+    }
+
+    function updateEnemyCount() {
+      document.getElementById('enemiesLeft').textContent = enemiesRemaining;
+    }
+
+    function showQuestion() {
+      const level = levels[currentLevel - 1];
+      const wall = document.getElementById('questionWall');
+      
+      wall.innerHTML = `
+        <div class="question-text">${level.question}</div>
+        <div class="answers-grid">
+          ${level.answers.map((answer, index) => `
+            <div class="answer-target" onclick="checkAnswer(${index})">
+              ${answer}
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      wall.classList.remove('hidden');
+    }
+
+    function checkAnswer(index) {
+      if (!gameActive) return;
+      
+      const level = levels[currentLevel - 1];
+      document.getElementById('questionWall').classList.add('hidden');
+      
+      if (index === level.correct) {
+        completeLevel();
+      } else {
+        triggerDeath();
+      }
+    }
+
+    function triggerDeath() {
+      gameActive = false;
+      const laser = document.getElementById('sniperLaser');
+      const overlay = document.getElementById('deathOverlay');
+      
+      laser.classList.add('active');
+      
+      setTimeout(() => {
+        laser.classList.remove('active');
+        overlay.classList.add('active');
+      }, 2000);
+    }
+
+    function restartLevel() {
+      document.getElementById('deathOverlay').classList.remove('active');
+      document.getElementById('enemiesContainer').innerHTML = '';
+      document.getElementById('questionWall').classList.add('hidden');
+      loadLevel(currentLevel);
+    }
+
+    function completeLevel() {
+      gameActive = false;
+      
+      if (currentLevel === unlockedLevels && unlockedLevels < levels.length) {
+        unlockedLevels++;
+        renderLevelCards();
+      }
+      
+      const complete = document.getElementById('levelComplete');
+      const message = document.getElementById('completeMessage');
+      
+      if (currentLevel < levels.length) {
+        message.textContent = `لقد أكملت ${levels[currentLevel - 1].name}! المرحلة ${currentLevel + 1} مفتوحة الآن 🔓`;
+      } else {
+        message.textContent = 'مبروك! لقد أكملت جميع المراحل! 🎉';
+      }
+      
+      complete.classList.add('active');
+    }
+
+    function nextLevel() {
+      document.getElementById('levelComplete').classList.remove('active');
+      
+      if (currentLevel < levels.length) {
+        loadLevel(currentLevel + 1);
+      } else {
+        exitGame();
+      }
+    }
+
+    function exitGame() {
+      document.getElementById('gameScreen').classList.remove('active');
+      document.getElementById('deathOverlay').classList.remove('active');
+      document.getElementById('levelComplete').classList.remove('active');
+      document.getElementById('enemiesContainer').innerHTML = '';
+      document.getElementById('questionWall').classList.add('hidden');
+      gameActive = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function onConfigChange(newConfig) {
+      Object.assign(config, newConfig);
+      
+      document.querySelectorAll('.game-title, #mainTitle, #navTitle').forEach(el => {
+        el.textContent = config.game_title || defaultConfig.game_title;
+      });
+      
+      document.querySelectorAll('.logo-text').forEach(el => {
+        el.style.color = config.primary_color;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                cfg.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => {
+                cfg.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ["game_title", cfg.game_title || defaultConfig.game_title]
+        ])
+      });
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a0d19329683ed2a',t:'MTc2MzUyNzk0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
